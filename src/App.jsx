@@ -8,6 +8,8 @@ import TransactionList from "./components/TransactionList";
 import SearchBar from "./components/SearchBar";
 import ExportCSV from "./components/ExportCSV";
 import ExportPDF from "./components/ExportPDF";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [transactions, setTransactions] = useState(() => {
@@ -21,10 +23,32 @@ function App() {
   const [category, setCategory] = useState("General");
   const [search, setSearch] = useState("");
 const [filter, setFilter] = useState("all");
+const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem("theme") === "dark";
+});
+const [editId, setEditId] = useState(null);
 
-  const addTransaction = () => {
-    if (text.trim() === "" || amount === "") return;
+ const addTransaction = () => {
+  if (text.trim() === "" || amount === "") return;
 
+  if (editId) {
+    setTransactions(
+      transactions.map((item) =>
+        item.id === editId
+          ? {
+              ...item,
+              text,
+              amount: Number(amount),
+              date,
+              category,
+            }
+          : item
+      )
+    );
+
+    setEditId(null);
+    toast.info("Transaction Updated Successfully!");
+  } else {
     const newTransaction = {
       id: Date.now(),
       text,
@@ -34,17 +58,38 @@ const [filter, setFilter] = useState("all");
     };
 
     setTransactions([...transactions, newTransaction]);
-    setText("");
-    setAmount("");
-  };
+  toast.success("Transaction Added Successfully!");
+  }
+  setText("");
+  setAmount("");
+  setDate(new Date().toISOString().split("T")[0]);
+  setCategory("General");
+};
 
   const deleteTransaction = (id) => {
-    setTransactions(transactions.filter((item) => item.id !== id));
-  };
+  setTransactions(transactions.filter((item) => item.id !== id));
+  toast.error("Transaction Deleted Successfully!");
+};
+  const editTransaction = (item) => {
+  setEditId(item.id);
+  setText(item.text);
+  setAmount(item.amount);
+  setDate(item.date);
+  setCategory(item.category);
+};
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
+  useEffect(() => {
+  if (darkMode) {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.body.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+}, [darkMode]);
 
   const income = transactions
     .filter((item) => item.amount > 0)
@@ -59,6 +104,11 @@ const [filter, setFilter] = useState("all");
   return (
     <div className="container">
       <Header />
+      <div style={{ textAlign: "right", marginBottom: "15px" }}>
+  <button onClick={() => setDarkMode(!darkMode)}>
+    {darkMode ? "☀ Light Mode" : "🌙 Dark Mode"}
+  </button>
+</div>
 
       <Summary
   balance={balance}
@@ -75,6 +125,7 @@ const [filter, setFilter] = useState("all");
   category={category}
   setCategory={setCategory}
   addTransaction={addTransaction}
+  editId={editId}
 />
 <SearchBar
   search={search}
@@ -88,6 +139,10 @@ const [filter, setFilter] = useState("all");
       />
       <ExportCSV transactions={transactions} />
       <ExportPDF transactions={transactions} />
+
+
+
+      
 <TransactionList
   transactions={transactions.filter((item) => {
     const matchSearch = item.text
@@ -105,6 +160,15 @@ const [filter, setFilter] = useState("all");
     return matchSearch;
   })}
   deleteTransaction={deleteTransaction}
+  editTransaction={editTransaction}
+/>
+<ToastContainer
+  position="top-right"
+  autoClose={2000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  pauseOnHover
 />
     </div>
   );

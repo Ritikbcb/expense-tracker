@@ -155,3 +155,97 @@ width:100%;
 }
 
 }
+/* ===== HEADER ===== */
+
+.header{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:#fff;
+  padding:25px;
+  border-radius:15px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.header h1{
+  margin:0;
+  font-size:34px;
+}
+
+.header p{
+  margin-top:8px;
+  opacity:.9;
+  font-size:16px;
+}
+.action-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.edit-btn{
+  background:#f59e0b;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.edit-btn:hover{
+  background:#d97706;
+}
+
+.delete-btn{
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.delete-btn:hover{
+  background:#dc2626;
+}
+/* ===== DARK MODE ===== */
+
+body.dark {
+  background: #121212;
+  color: white;
+}
+
+body.dark .container {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark .card {
+  background: #2d2d2d;
+  color: white;
+}
+
+body.dark .form {
+  background: #2d2d2d;
+}
+
+body.dark .list li {
+  background: #2d2d2d;
+  color: white;
+}
+
+body.dark input,
+body.dark select {
+  background: #3a3a3a;
+  color: white;
+  border: 1px solid #555;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark p,
+body.dark small,
+body.dark strong {
+  color: white;
+}

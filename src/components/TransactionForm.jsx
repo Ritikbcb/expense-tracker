@@ -8,6 +8,7 @@ function TransactionForm({
   category,
   setCategory,
   addTransaction,
+  editId,
 }) {
   return (
     <div className="form">
@@ -45,7 +46,7 @@ function TransactionForm({
       </select>
 
       <button onClick={addTransaction}>
-        Add
+        {editId ? "Update" : "Add"}
       </button>
 
     </div>
